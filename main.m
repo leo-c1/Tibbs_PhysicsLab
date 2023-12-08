@@ -86,7 +86,5 @@ function getCoordinates(source, eventdata, ax)
     % Display the coordinates
     msgbox(sprintf('X: %.2f, Y: %.2f, Z: %s', x, y, zStr), 'Coordinates');
 end
-
-% Run the application
 main();
 
