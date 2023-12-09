@@ -7,6 +7,8 @@ function main()
     loadBtn = uicontrol('Style', 'pushbutton', 'String', 'Load CSV', 'Position', [20, 550, 100, 30], 'Callback', {@loadFile, ax});
     vectorBtn = uicontrol('Style', 'pushbutton', 'String', 'Plot Vectors', 'Position', [20, 500, 100, 30], 'Callback', {@plotVectors, ax});
     coordBtn = uicontrol('Style', 'pushbutton', 'String', 'Get Coordinates', 'Position', [20, 450, 100, 30], 'Callback', {@getCoordinates, ax});
+    plotGraphBtn = uicontrol('Style', 'pushbutton', 'String', 'Plot Graph', 'Position', [20, 400, 100, 30], 'Callback', {@plotGraph, ax});
+    clearGraphBtn = uicontrol('Style', 'pushbutton', 'String', 'Clear Graph', 'Position', [20, 350, 100, 30], 'Callback', {@clearGraph, ax});
 
     % store axes in userdata
     set(fig, 'UserData', ax);
@@ -18,22 +20,31 @@ function loadFile(source, eventdata, ax)
         fullPath = fullfile(filePath, fileName);
         try
             data = csvread(fullPath);
-
-            % plot data
-            axes(ax);
-            surf(ax, data);
-            title(ax, 'Surface Plot');
-
-            % label axes x y z
-            xlabel(ax, 'X');
-            ylabel(ax, 'Y');
-            zlabel(ax, 'Z');
-            % store graph in userdata
             set(ax, 'UserData', data);
         catch
             errordlg('Error loading file', 'File Error');
         end
     end
+end
+
+function plotGraph(source, eventdata, ax)
+    data = get(ax, 'UserData');
+    if isempty(data)
+        errordlg('No data to plot', 'Plot Error');
+        return;
+    end
+
+    % plot
+    axes(ax);
+    surf(ax, data);
+    title(ax, 'Surface Plot');
+    xlabel(ax, 'X');
+    ylabel(ax, 'Y');
+    zlabel(ax, 'Z');
+end
+
+function clearGraph(source, eventdata, ax)
+    cla(ax); % clear axes
 end
 
 function plotVectors(source, eventdata, ax)
